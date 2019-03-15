@@ -1,0 +1,174 @@
+cmd[setlocal enabledelayedexpansion]
+title[Magic Square Calc - Enter ? for unknowns.]
+define.prompt[ax="a x= "]
+define.prompt[an="a n= "]
+clear
+define.prompt[bx="a x= %ax%     b x= "]
+define.prompt[bn="a n= %an%     b n= "]
+clear
+define.prompt[cx="a x= %ax%     b x= %bx%     c x= "]
+define.prompt[cn="a n= %an%     b n= %bn%     c n= "]
+print[]
+define.prompt[dx="d x= "]
+define.prompt[dn="d n= "]
+clear
+print[a x= %ax%     b x= %bx%     c x= %cx%]
+print[a n= %an%     b n= %bn%     c x= %cn%]
+print[]
+define.prompt[ex="d x= %dx%     e x= "]
+define.prompt[en="d n= %dn%     e n= "]
+clear
+print[a x= %ax%     b x= %bx%     c x= %cx%]
+print[a n= %an%     b n= %bn%     c x= %cn%]
+print[]
+define.prompt[fx="d x= %dx%     e x= %ex%     f x= "]
+define.prompt[fn="d n= %dn%     e n= %en%     f n= "]
+print[]
+define.prompt[gx="g x= "]
+define.prompt[gn="g n= "]
+clear
+print[a x= %ax%     b x= %bx%     c x= %cx%]
+print[a n= %an%     b n= %bn%     c x= %cn%]
+print[]
+print[d x= %dx%     e x= %ex%     f x= %fx%]
+print[d n= %dn%     e n= %en%     f n= %fn%]
+print[]
+define.prompt[hx="g x= %gx%     h x= "]
+define.prompt[hn="g n= %gn%     h n= "]
+clear
+print[a x= %ax%     b x= %bx%     c x= %cx%]
+print[a n= %an%     b n= %bn%     c x= %cn%]
+print[]
+print[d x= %dx%     e x= %ex%     f x= %fx%]
+print[d n= %dn%     e n= %en%     f n= %fn%]
+print[]
+define.prompt[ix="g x= %gx%     h x= %hx%     i x= %ix%"]
+define.prompt[in="g n= %gn%     h n= %hn%     i n= %in%"]
+print[]
+print[Attempting to calculate M...]
+[mx=?]
+[mn=?]
+if[%ax% NEQ ?] {
+	if[%bx% NEQ ?] {
+		if[%cx% NEQ ?] {
+			define.math[mx=%ax%+%bx%+%cx%]
+			define.math[mn=%an%+%bn%+%cn%]
+		}
+	}
+	if[%dx% NEQ ?] {
+		if[%gx% NEQ ?] {
+			define.math[mx=%ax%+%dx%+%gx%]
+			define.math[mn=%an%+%dn%+%gn%]
+		}
+	}
+	if[%ex% NEQ ?] {
+		if[%ix% NEQ ?] {
+			define.math[mx=%ax%+%ex%+%ix%]
+			define.math[mn=%an%+%en%+%in%]
+		}
+	}
+}
+if[%dx% NEQ ?] {
+	if[%ex% NEQ ?] {
+		if[%fx% NEQ ?] {
+			define.math[mx=%dx%+%ex%+%fx%]
+			define.math[mn=%dn%+%en%+%fn%]
+		}
+	}
+}
+if[%gx% NEQ ?] {
+	if[%hx% NEQ ?] {
+		if[%ix% NEQ ?] {
+			define.math[mx=%gx%+%hx%+%ix%]
+			define.math[mn=%gn%+%hn%+%in%]
+		}
+	}
+}
+if[%bx% NEQ ?] {
+	if[%ex% NEQ ?] {
+		if[%hx% NEQ ?] {
+			define.math[mx=%bx%+%ex%+%hx%]
+			define.math[mn=%bn%+%en%+%hn%]
+		}
+	}
+}
+if[%cx% NEQ ?] {
+	if[%fx% NEQ ?] {
+		if[%ix% NEQ ?] {
+			define.math[mx=%cx%+%fx%+%ix%]
+			define.math[mn=%cn%+%fn%+%in%]
+		}
+	}
+	if[%ex% NEQ ?] {
+		if[%gx% NEQ ?] {
+			define.math[mx=%cx%+%ex%+%gx%]
+			define.math[mn=%cn%+%en%+%gn%]
+		}
+	}
+}
+define.function[add] {
+	define.math[resultx=%~1+%~3]
+	define.math[resultn=%~2+%~4]
+}
+define.function[sub] {
+	define.math[resultx=%~1-%~3]
+	define.math[resultn=%~2-%~4]
+}
+define.function[get] {
+	[resultx=?]
+	if[!%arg1%x! NEQ ?] {
+		if[!%arg2%x! NEQ ?] {
+			$add !%arg1%x! !%arg1%n! !%arg2%x! !%arg2%n!
+		}
+	}
+	if[%resultx% NEQ ?] {
+		$sub !mx! !mn! !resultx! !resultn!
+	}
+	if[%resultx% NEQ ?] {
+		if[!%~3x!==?] {
+			[%~3x=!resultx!]
+			[%~3n=!resultn!]
+		}
+	}
+}
+define.function[pass] {
+	print[Passing...]
+	$get a b c
+	$get a c b
+	$get a e i
+	$get a i e
+	$get a d g
+	$get a g d
+	$get b c a
+	$get b e h
+	$get b h e
+	$get c e g
+	$get c g e
+	$get c f i
+	$get c i f
+	$get d g a
+	$get d e f
+	$get d f e
+	$get e f d
+	$get e h b
+	$get e i a
+	$get f i c
+	$get g h i
+	$get g i h
+	$get h i g
+}
+print[M is %mx%x+%mn%]
+while[true] {
+	$pass
+	wait[1]
+	clear
+	print[[M=%mx%x+%mn%]]
+	print[]
+	print[%ax%x+%an%     %bx%x+%bn%     %cx%x+%cn%]
+	print[]
+	print[%dx%x+%dn%     %ex%x+%en%     %fx%x+%fn%]
+	print[]
+	print[%gx%x+%gn%     %hx%x+%hn%     %ix%x+%in%]
+	print[]
+}
+export 
