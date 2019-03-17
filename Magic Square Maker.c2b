@@ -1,12 +1,15 @@
 place[start]
+# Sets x and n bases to a random number.
 [x=%random:~-1,2%]
 [n=%random:~-1,2%]
+# If number is 0, repeat.
 if[%x:~0,1%==0] {
 	goto[start]
 }
 if[%n:~0,1%==0] {
 	goto[start]
 }
+# Multiplies a magic square by the random number to get new values for *x.
 define.math[ax=%x%*2]
 define.math[bx=%x%*7]
 define.math[cx=%x%*6]
@@ -16,6 +19,7 @@ define.math[fx=%x%*1]
 define.math[gx=%x%*4]
 define.math[hx=%x%*3]
 define.math[ix=%x%*8]
+# Does the same for n
 define.math[an=%n%*6]
 define.math[bn=%n%*1]
 define.math[cn=%n%*8]
@@ -25,6 +29,7 @@ define.math[fn=%n%*3]
 define.math[gn=%n%*2]
 define.math[hn=%n%*9]
 define.math[in=%n%*4]
+# Adds up all the diagonals, horizontals, and verticals to verify the magic square.
 define.math[abcx=%ax%+%bx%+%cx%]
 define.math[abcn=%an%+%bn%+%cn%]
 define.math[defx=%dx%+%ex%+%fx%]
@@ -41,6 +46,7 @@ define.math[aeix=%ax%+%ex%+%ix%]
 define.math[aein=%an%+%en%+%in%]
 define.math[cegx=%cx%+%ex%+%gx%]
 define.math[cegn=%cn%+%en%+%gn%]
+# Prints magic square. 
 print[                                          =%cegx%x+%cegn%]
 print[]
 print[]
