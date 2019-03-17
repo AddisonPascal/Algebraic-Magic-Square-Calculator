@@ -1,5 +1,6 @@
 cmd[setlocal enabledelayedexpansion]
 title[Magic Square Calc - Enter ? for unknowns.]
+# Saves variables as user's input
 define.prompt[ax="a x= "]
 define.prompt[an="a n= "]
 clear
@@ -48,6 +49,7 @@ print[]
 print[Attempting to calculate M...]
 [mx=?]
 [mn=?]
+# Looks for three-in-a-row values to calculate M
 if[%ax% NEQ ?] {
 	if[%bx% NEQ ?] {
 		if[%cx% NEQ ?] {
@@ -106,14 +108,17 @@ if[%cx% NEQ ?] {
 		}
 	}
 }
+# Add function, to add complex numbers
 define.function[add] {
 	define.math[resultx=%~1+%~3]
 	define.math[resultn=%~2+%~4]
 }
+# Sub function, to subtract complex numbers
 define.function[sub] {
 	define.math[resultx=%~1-%~3]
 	define.math[resultn=%~2-%~4]
 }
+# Get function, to see whether there are two of three-in-a-row values to calculate another values
 define.function[get] {
 	[resultx=?]
 	if[!%arg1%x! NEQ ?] {
@@ -131,8 +136,10 @@ define.function[get] {
 		}
 	}
 }
+# Pass function to pass through the magic square to attempt to solve the rest.
 define.function[pass] {
 	print[Passing...]
+	# Table for which values to $get
 	$get a b c
 	$get a c b
 	$get a e i
@@ -158,10 +165,13 @@ define.function[pass] {
 	$get h i g
 }
 print[M is %mx%x+%mn%]
+# Keeps passing
 while[true] {
 	$pass
+	# Waits a second for readibility
 	wait[1]
 	clear
+	# Prints M and known values.
 	print[[M=%mx%x+%mn%]]
 	print[]
 	print[%ax%x+%an%     %bx%x+%bn%     %cx%x+%cn%]
